@@ -1,0 +1,231 @@
+<template>
+  <body>
+    <section class="container">
+      <div class="login-container">
+        <!-- First Circle -->
+        <div class="circle circle-one"></div>
+        
+        <!-- Form Container -->
+        <div class="form-container">
+          <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png" alt="illustration" class="illustration" />
+          <h1 class="opacity">SE CONNECTER</h1>
+          <form @submit.prevent="loginUser">
+            <input v-model="email" type="email" placeholder="Email" required />
+            <input v-model="password" type="password" placeholder="Password" required />
+            <button type="submit" class="opacity">SE CONNECTER</button>
+          </form>
+          <div class="register-forget opacity">
+            <a href="/inscription">REGISTRE</a>
+          </div>
+
+        </div>
+        
+        <!-- Second Circle -->
+        <div class="circle circle-two"></div>
+      </div>
+      
+      <!-- Theme Button Container -->
+      <div class="theme-btn-container"></div>
+    </section>
+  </body>
+</template>
+
+
+<script>
+import AuthService from '@/services/AuthService';
+
+export default {
+  name: 'Login',
+  data() {
+    return {
+      email: '',
+      password: '',
+    };
+  },
+  methods: {
+    async loginUser() {
+      const credentials = {
+        email: this.email,
+        password: this.password,
+      };
+      try {
+        const response = await AuthService.getToken(credentials);
+        localStorage.setItem('token', response.data.token); // Store JWT token
+        console.log('Token received:', response.data);
+        this.$router.push({ name: 'Dashboard' }); // Navigate to another page after successful login
+      } catch (error) {
+        console.error('Login failed:', error.response.data);
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+:root {
+  --background: #1a1a2e;
+  --color: #ffffff;
+  --primary-color: #0f3460;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  background: var(--background);
+  color: var(--color);
+  letter-spacing: 1px;
+  transition: background 0.2s ease;
+}
+
+a {
+  text-decoration: none;
+  color: var(--color);
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  position: relative;
+  width: 22.2rem;
+}
+
+.form-container {
+  border: 1px solid hsla(0, 0%, 65%, 0.158);
+  box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  backdrop-filter: blur(20px);
+  z-index: 99;
+  padding: 2rem;
+}
+
+.login-container form input {
+  display: block;
+  padding: 14.5px;
+  width: 100%;
+  margin: 2rem 0;
+  color: var(--color);
+  outline: none;
+  background-color: #9191911f;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  font-size: 15px;
+  backdrop-filter: blur(15px);
+}
+
+.login-container form input:focus {
+  box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.2);
+  animation: wobble 0.3s ease-in;
+}
+
+.login-container form button {
+  background-color: var(--primary-color);
+  color: var(--color);
+  display: block;
+  padding: 13px;
+  border-radius: 5px;
+  outline: none;
+  font-size: 18px;
+  letter-spacing: 1.5px;
+  font-weight: bold;
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  transition: all 0.1s ease-in-out;
+}
+
+.login-container form button:hover {
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.15);
+  transform: scale(1.02);
+}
+
+.circle {
+  width: 8rem;
+  height: 8rem;
+  background: rgb(107, 107, 239);
+  border-radius: 50%;
+  position: absolute;
+
+}
+
+.illustration {
+  position: absolute;
+  top: -14%;
+  right: -2px;
+  width: 90%;
+}
+
+.circle-one {
+  top: 0;
+  left: 0;
+  z-index: -1;
+  transform: translate(-45%, -45%);
+}
+
+.circle-two {
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+  transform: translate(45%, 45%);
+}
+
+.register-forget {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.opacity {
+  opacity: 0.6;
+}
+
+.theme-btn-container {
+  position: absolute;
+  left: 0;
+  bottom: 2rem;
+}
+
+.theme-btn {
+  cursor: pointer;
+  transition: all 0.3s ease-in;
+}
+
+.theme-btn:hover {
+  width: 40px !important;
+}
+
+@keyframes wobble {
+  0% {
+    transform: scale(1.025);
+  }
+  25% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.025);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+</style>
